@@ -7,6 +7,7 @@
 #define FPS 10
 
 extern short sDirection;
+bool gameOver = false;
 
 void timer_callback(int);
 void display_callback();
@@ -37,7 +38,15 @@ void display_callback() {
   glClear(GL_COLOR_BUFFER_BIT);
   drawGrid();
   drawSnake();
+  drawFood();
   glutSwapBuffers();
+
+  //lógica se snake ultrapssar as bordas
+  if(gameOver) {
+    // Funciona somente no windows
+    MessageBox(NULL, "Your score: ", "Game over", 0);
+    exit(0);
+  }
 }
 void reshape_callback(int width, int height) {
   glViewport(0, 0, (GLsizei)width, (GLsizei)height);
