@@ -1,5 +1,6 @@
 #include <GL/gl.h>
 #include <GL/glut.h>
+#include <stdlib.h>
 #include "game.h"
 
 #define COLUMNS 40
@@ -8,6 +9,7 @@
 
 extern short sDirection;
 bool gameOver = false;
+int score = 0;
 
 void timer_callback(int);
 void display_callback();
@@ -43,8 +45,13 @@ void display_callback() {
 
   //lógica se snake ultrapssar as bordas
   if(gameOver) {
+
+    char _score[10];
+    itoa(score, _score, 10);
+    char text[50] = "Your score: ";
+    strcat(text, _score);
     // Funciona somente no windows
-    MessageBox(NULL, "Your score: ", "Game over", 0);
+    MessageBox(NULL, text, "Game over", 0);
     exit(0);
   }
 }

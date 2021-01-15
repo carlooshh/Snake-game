@@ -3,9 +3,10 @@
 #include <ctime>
 #include "game.h"
 
+extern int score;
 int gridX, gridY;
-int posX=20, posY=20;
-
+int posX[60]={20, 20, 20, 20, 20}, posY[60]={20,19, 18, 17, 16};
+int snake_length = 5;
 short sDirection = RIGHT;
 extern bool gameOver;
 
@@ -53,21 +54,38 @@ void drawFood() {
 
 
 void drawSnake() {
-  if(sDirection == UP)
-    posY++;
-  else if(sDirection == DOWN)
-    posY--;
-  else if(sDirection == RIGHT)
-    posX++;
-  else if(sDirection == LEFT)
-    posX--;
+  for(int i = snake_length -1; i >0; i--) {
+    posX[i] = posX[i-1];
+    posY[i] = posY[i-1];
+  }
 
-  glColor3f(0.0, 1.0, 0.0);
-  glRectd(posX, posY, posX+1, posY+1);
-  if(posX == 0 || posX ==gridX-1 || posY ==0 || posY==gridY-1)
+  if(sDirection == UP)
+    posY[0]++;
+  else if(sDirection == DOWN)
+    posY[0]--;
+  else if(sDirection == RIGHT)
+    posX[0]++;
+  else if(sDirection == LEFT)
+    posX[0]--;
+
+  for(int i = 0; i<snake_length; i++) {
+    if(i ==0)
+      glColor3f(0.0, 1.0, 0.0);
+    else
+      glColor3f(0.0, 0.0, 1.0);
+      glRectd(posX[i], posY[i], posX[i]+1, posY[i]+1);
+
+  }
+  if(posX[0] == 0 || posX[0] ==gridX-1 || posY[0] ==0 || posY[0]==gridY-1)
     gameOver = true;
-  if(posX == foodX && posY == foodY)
+  if(posX[0] == foodX && posY[0] == foodY) {
+    score++;
+    snake_length++;
+    if(snake_length > MAX) {
+      snake_length = MAX;
+    }
     food = true;
+  }
 }
 
 void ramdom(int &x, int &y) {
